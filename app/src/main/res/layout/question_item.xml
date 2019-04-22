@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:layout_marginBottom="@dimen/tb_spacing"
+   android:layout_marginLeft="@dimen/lr_spacing"
+   android:layout_marginRight="@dimen/lr_spacing"
+   android:layout_marginTop="@dimen/tb_spacing"
+   android:orientation="vertical">
+
+   <TextView
+      android:id="@+id/questionTitle"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:ellipsize="end"
+      android:maxLines="3"
+      android:padding="8dp"
+      tools:text="@tools:sample/lorem/random" />
+
+   <RadioGroup
+      android:id="@+id/questionsRadioGroup"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp" />
+
+</LinearLayout>

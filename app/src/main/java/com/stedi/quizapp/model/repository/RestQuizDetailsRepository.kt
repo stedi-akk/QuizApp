@@ -1,5 +1,6 @@
 package com.stedi.quizapp.model.repository
 
+import com.stedi.quizapp.model.Quiz
 import com.stedi.quizapp.model.QuizDetails
 import io.reactivex.Single
 import okhttp3.OkHttpClient
@@ -16,10 +17,10 @@ class RestQuizDetailsRepository(
 
    private interface GetCall {
       @GET("quiz/{id}/0")
-      fun call(@Path("id") id: Int): Call<QuizDetails>
+      fun call(@Path("id") id: String): Call<QuizDetails>
    }
 
-   override fun get(id: Int): Single<QuizDetails> {
+   override fun get(quiz: Quiz): Single<QuizDetails> {
       return Single.fromCallable {
          val retrofit = Retrofit.Builder()
             .client(okHttpClient)
@@ -28,7 +29,7 @@ class RestQuizDetailsRepository(
             .build()
 
          val response = retrofit.create(GetCall::class.java)
-            .call(id).execute()
+            .call(quiz.id!!).execute()
 
          if (response.isSuccessful) {
             response.body() ?: throw IOException()

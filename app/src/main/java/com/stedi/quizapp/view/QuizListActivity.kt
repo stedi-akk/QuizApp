@@ -10,27 +10,26 @@ import com.stedi.quizapp.model.Quiz
 import com.stedi.quizapp.other.NoNetworkException
 import com.stedi.quizapp.other.showToastLong
 import com.stedi.quizapp.vm.QuizListVM
-import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.quiz_list_activity.*
 import javax.inject.Inject
 
-class MainActivity : BaseActivity() {
+class QuizListActivity : BaseActivity() {
 
    @Inject
    lateinit var viewModelFactory: ViewModelProvider.Factory
 
    private lateinit var viewModel: QuizListVM
-
    private lateinit var quizListAdapter: QuizListAdapter
 
    override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
 
       viewModel = ViewModelProviders.of(this, viewModelFactory)[QuizListVM::class.java].apply {
-         quizListLoaded.observe(this@MainActivity, Observer { quizListLoaded(it) })
-         loadQuizListError.observe(this@MainActivity, Observer { loadQuizListError(it) })
+         quizListLoaded.observe(this@QuizListActivity, Observer { quizListLoaded(it) })
+         loadQuizListError.observe(this@QuizListActivity, Observer { loadQuizListError(it) })
       }
 
-      setContentView(R.layout.main_activity)
+      setContentView(R.layout.quiz_list_activity)
 
       quizListAdapter = QuizListAdapter(this) { openQuiz(it) }
 
@@ -61,6 +60,6 @@ class MainActivity : BaseActivity() {
    }
 
    private fun openQuiz(quiz: Quiz) {
-
+      QuizDetailsActivity.start(this, quiz)
    }
 }

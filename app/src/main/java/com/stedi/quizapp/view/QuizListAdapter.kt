@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.stedi.quizapp.R
 import com.stedi.quizapp.model.Quiz
-import kotlinx.android.synthetic.main.quiz_item.view.*
+import kotlinx.android.synthetic.main.quiz_content.view.*
 
 class QuizHolder(item: View) : RecyclerView.ViewHolder(item)
 
