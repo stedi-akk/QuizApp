@@ -5,5 +5,5 @@ import io.reactivex.Single
 
 interface QuizRepository {
 
-   fun get(count: Int): Single<Quiz>
+   fun get(count: Int): Single<List<Quiz>>
 }

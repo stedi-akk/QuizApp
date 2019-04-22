@@ -1,2 +1,5 @@
 <resources>
+   <string name="no_network_message">Brak sieci</string>
+   <string name="unknown_error">Nieznany błąd</string>
+   <string name="nothing_to_show">Nic do pokazania</string>
 </resources>
