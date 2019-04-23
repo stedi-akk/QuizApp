@@ -9,4 +9,11 @@ data class Image(
    @SerializedName("url") val url: String? = null,
    @SerializedName("width") val width: String? = null,
    @SerializedName("height") val height: String? = null
-) : Parcelable
+) : Parcelable {
+
+   fun isValid(): Boolean {
+      return !url.isNullOrEmpty()
+            && !width.isNullOrEmpty()
+            && !height.isNullOrEmpty()
+   }
+}

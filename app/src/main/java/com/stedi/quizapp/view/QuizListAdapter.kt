@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.stedi.quizapp.R
 import com.stedi.quizapp.model.Quiz
+import com.stedi.quizapp.other.visibleOrGone
 import kotlinx.android.synthetic.main.quiz_content.view.*
 
 class QuizHolder(item: View) : RecyclerView.ViewHolder(item)
@@ -38,13 +39,19 @@ class QuizListAdapter(
    override fun onBindViewHolder(holder: QuizHolder, position: Int) {
       holder.itemView.apply {
          val quiz = quizList[position]
-
-         Picasso.get()
-            .load(quiz.image?.url)
-            .fit()
-            .into(quizImage)
-
+         if (quiz.image != null && quiz.image.isValid()) {
+            quizImage.visibleOrGone = true
+            Picasso.get()
+               .load(quiz.image.url)
+               .fit()
+               .centerCrop()
+               .into(quizImage)
+         } else {
+            quizImage.visibleOrGone = false
+         }
          quizDate.text = quiz.createdAt ?: TEXT_NOT_FOUND
+         quizTitle.visibleOrGone = !quiz.title.isNullOrEmpty()
+         quizContent.visibleOrGone = !quiz.content.isNullOrEmpty()
          quizTitle.text = quiz.title ?: TEXT_NOT_FOUND
          quizContent.text = quiz.content ?: TEXT_NOT_FOUND
          setOnClickListener { clickListener(quiz) }

@@ -11,6 +11,7 @@ import com.stedi.quizapp.R
 import com.stedi.quizapp.model.Question
 import com.stedi.quizapp.model.Quiz
 import com.stedi.quizapp.model.QuizDetails
+import com.stedi.quizapp.other.visibleOrGone
 import kotlinx.android.synthetic.main.question_item.view.*
 import kotlinx.android.synthetic.main.question_item_footer.view.*
 import kotlinx.android.synthetic.main.quiz_content.view.*
@@ -71,19 +72,27 @@ class QuizDetailsAdapter(
 
    override fun onBindViewHolder(holder: QuizDetailsHolder, position: Int) {
       when (getItemViewType(position)) {
-         ViewType.HEADER.ordinal -> onBindHeader(holder)
+         ViewType.HEADER.ordinal -> onBindHeader(holder, quiz)
          ViewType.FOOTER.ordinal -> onBindFooter(holder)
          else -> onBindQuestion(holder, quizDetails.questions[position - 1])
       }
    }
 
-   private fun onBindHeader(holder: QuizDetailsHolder) {
+   private fun onBindHeader(holder: QuizDetailsHolder, quiz: Quiz) {
       holder.itemView.apply {
-         Picasso.get()
-            .load(quiz.image?.url)
-            .fit()
-            .into(quizImage)
+         if (quiz.image != null && quiz.image.isValid()) {
+            quizImage.visibleOrGone = true
+            Picasso.get()
+               .load(quiz.image.url)
+               .fit()
+               .centerInside()
+               .into(quizImage)
+         } else {
+            quizImage.visibleOrGone = false
+         }
          quizDate.text = quiz.createdAt ?: TEXT_NOT_FOUND
+         quizTitle.visibleOrGone = !quiz.title.isNullOrEmpty()
+         quizContent.visibleOrGone = !quiz.content.isNullOrEmpty()
          quizTitle.text = quiz.title ?: TEXT_NOT_FOUND
          quizContent.text = quiz.content ?: TEXT_NOT_FOUND
       }
@@ -99,6 +108,16 @@ class QuizDetailsAdapter(
 
    private fun onBindQuestion(holder: QuizDetailsHolder, question: Question) {
       holder.itemView.apply {
+         if (question.image != null && question.image.isValid()) {
+            questionImage.visibleOrGone = true
+            Picasso.get()
+               .load(question.image.url)
+               .fit()
+               .centerInside()
+               .into(questionImage)
+         } else {
+            questionImage.visibleOrGone = false
+         }
          questionTitle.text = question.text ?: TEXT_NOT_FOUND
          questionsRadioGroup.removeAllViews()
          question.answers.forEachIndexed { index, answer ->

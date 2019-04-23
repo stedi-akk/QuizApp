@@ -3,6 +3,7 @@ package com.stedi.quizapp.other
 import android.content.Context
 import android.net.ConnectivityManager
 import android.util.TypedValue
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.DimenRes
 import androidx.annotation.StringRes
@@ -43,3 +44,23 @@ fun Context.showToastLong(message: String) {
 fun Context.showToastShort(message: String) {
    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
+
+var View.visible: Boolean
+   get() = visibility == View.VISIBLE
+   set(value) {
+      visibility = if (value) {
+         View.VISIBLE
+      } else {
+         View.INVISIBLE
+      }
+   }
+
+var View.visibleOrGone: Boolean
+   get() = visibility == View.VISIBLE
+   set(value) {
+      visibility = if (value) {
+         View.VISIBLE
+      } else {
+         View.GONE
+      }
+   }
