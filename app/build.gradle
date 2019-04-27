@@ -62,6 +62,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.14.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.14.1'
 
+    implementation 'com.j256.ormlite:ormlite-android:5.1'
+
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.27.0'
     testImplementation 'android.arch.core:core-testing:1.1.1'

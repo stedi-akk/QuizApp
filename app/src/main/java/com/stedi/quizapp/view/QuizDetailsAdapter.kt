@@ -74,16 +74,16 @@ class QuizDetailsAdapter(
       when (getItemViewType(position)) {
          ViewType.HEADER.ordinal -> onBindHeader(holder, quiz)
          ViewType.FOOTER.ordinal -> onBindFooter(holder)
-         else -> onBindQuestion(holder, quizDetails.questions[position - 1])
+         else -> onBindQuestion(holder, quizDetails.questions.elementAt(position - 1))
       }
    }
 
    private fun onBindHeader(holder: QuizDetailsHolder, quiz: Quiz) {
       holder.itemView.apply {
-         if (quiz.image != null && quiz.image.isValid()) {
+         if (quiz.image != null && quiz.image!!.isValid()) {
             quizImage.visibleOrGone = true
             Picasso.get()
-               .load(quiz.image.url)
+               .load(quiz.image!!.url)
                .fit()
                .centerInside()
                .into(quizImage)
@@ -108,10 +108,10 @@ class QuizDetailsAdapter(
 
    private fun onBindQuestion(holder: QuizDetailsHolder, question: Question) {
       holder.itemView.apply {
-         if (question.image != null && question.image.isValid()) {
+         if (question.image != null && question.image!!.isValid()) {
             questionImage.visibleOrGone = true
             Picasso.get()
-               .load(question.image.url)
+               .load(question.image!!.url)
                .fit()
                .centerInside()
                .into(questionImage)

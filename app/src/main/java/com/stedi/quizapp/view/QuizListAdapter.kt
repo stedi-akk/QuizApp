@@ -39,10 +39,10 @@ class QuizListAdapter(
    override fun onBindViewHolder(holder: QuizHolder, position: Int) {
       holder.itemView.apply {
          val quiz = quizList[position]
-         if (quiz.image != null && quiz.image.isValid()) {
+         if (quiz.image != null && quiz.image!!.isValid()) {
             quizImage.visibleOrGone = true
             Picasso.get()
-               .load(quiz.image.url)
+               .load(quiz.image!!.url)
                .fit()
                .centerCrop()
                .into(quizImage)

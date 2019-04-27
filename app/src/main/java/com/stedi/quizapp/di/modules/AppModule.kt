@@ -2,9 +2,9 @@ package com.stedi.quizapp.di.modules
 
 import android.app.Application
 import com.stedi.quizapp.BuildConfig
-import com.stedi.quizapp.model.repository.QuizDetailsRepository
+import com.stedi.quizapp.model.repository.DatabaseQuizRepository
 import com.stedi.quizapp.model.repository.QuizRepository
-import com.stedi.quizapp.model.repository.RestQuizDetailsRepository
+import com.stedi.quizapp.model.repository.QuizRepositorySourceMapper
 import com.stedi.quizapp.model.repository.RestQuizRepository
 import com.stedi.quizapp.other.NoNetworkInterceptor
 import dagger.Module
@@ -32,12 +32,10 @@ class AppModule {
    }
 
    @Provides
-   fun provideQuizRepository(okHttpClient: OkHttpClient): QuizRepository {
-      return RestQuizRepository(okHttpClient)
-   }
-
-   @Provides
-   fun provideQuizDetailsRepository(okHttpClient: OkHttpClient): QuizDetailsRepository {
-      return RestQuizDetailsRepository(okHttpClient)
+   fun provideQuizRepository(application: Application, okHttpClient: OkHttpClient): QuizRepository {
+      return QuizRepositorySourceMapper(
+         DatabaseQuizRepository(application),
+         RestQuizRepository(okHttpClient)
+      )
    }
 }

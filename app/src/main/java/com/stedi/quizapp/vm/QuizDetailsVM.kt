@@ -4,13 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.stedi.quizapp.model.Quiz
 import com.stedi.quizapp.model.QuizDetails
-import com.stedi.quizapp.model.repository.QuizDetailsRepository
+import com.stedi.quizapp.model.repository.QuizRepository
 import com.stedi.quizapp.other.ioMain
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class QuizDetailsVM @Inject constructor(
-   private val quizDetailsRepository: QuizDetailsRepository
+   private val quizRepository: QuizRepository
 ) : ViewModel() {
 
    val quizDetailsLoaded = MutableLiveData<QuizDetails>()
@@ -24,7 +24,8 @@ class QuizDetailsVM @Inject constructor(
    }
 
    fun loadQuizDetails(quiz: Quiz) {
-      quizDetailsRepository.get(quiz)
+      quizRepository.getDetails(quiz)
+         .toSingle()
          .ioMain()
          .subscribe({
             quizDetailsLoaded.value = it
