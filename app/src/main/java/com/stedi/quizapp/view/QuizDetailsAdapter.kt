@@ -8,9 +8,11 @@ import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.stedi.quizapp.R
+import com.stedi.quizapp.model.Answer
 import com.stedi.quizapp.model.Question
 import com.stedi.quizapp.model.Quiz
 import com.stedi.quizapp.model.QuizDetails
+import com.stedi.quizapp.other.toBoolean
 import com.stedi.quizapp.other.visibleOrGone
 import kotlinx.android.synthetic.main.question_item.view.*
 import kotlinx.android.synthetic.main.question_item_footer.view.*
@@ -21,7 +23,7 @@ class QuizDetailsHolder(item: View) : RecyclerView.ViewHolder(item)
 class QuizDetailsAdapter(
    private val context: Context,
    private val quiz: Quiz,
-   private val onQuizModified: () -> Unit,
+   private val onAnswerPicked: (Question, Answer) -> Unit,
    private val onFinishPressed: () -> Unit
 ) : RecyclerView.Adapter<QuizDetailsHolder>() {
 
@@ -124,11 +126,12 @@ class QuizDetailsAdapter(
             val rb = AppCompatRadioButton(context).apply {
                id = index
                text = answer.text ?: TEXT_NOT_FOUND
+               isChecked = answer.isPicked.toBoolean()
             }
             questionsRadioGroup.addView(rb)
          }
-         questionsRadioGroup.setOnCheckedChangeListener { _, _ ->
-            onQuizModified()
+         questionsRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+            onAnswerPicked(question, question.answers.elementAt(checkedId))
          }
       }
    }

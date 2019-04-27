@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stedi.quizapp.R
+import com.stedi.quizapp.model.Answer
+import com.stedi.quizapp.model.Question
 import com.stedi.quizapp.model.Quiz
 import com.stedi.quizapp.model.QuizDetails
 import com.stedi.quizapp.other.NoNetworkException
@@ -43,12 +45,14 @@ class QuizDetailsActivity : BaseActivity() {
 
       viewModel = ViewModelProviders.of(this, viewModelFactory)[QuizDetailsVM::class.java].apply {
          quizDetailsLoaded.observe(this@QuizDetailsActivity, Observer { quizDetailsLoaded(it) })
-         loadQuizDetailsError.observe(this@QuizDetailsActivity, Observer { loadQuizDetailsError(it) })
+         loadQuizDetailsError.observe(this@QuizDetailsActivity, Observer { onViewModelError(it) })
+         failedToPickAnswer.observe(this@QuizDetailsActivity, Observer { onViewModelError(it.third) })
       }
 
       setContentView(R.layout.quiz_details_activity)
 
-      quizDetailsAdapter = QuizDetailsAdapter(this, quiz, { onFinishPressed() }, { onQuizModified() })
+      quizDetailsAdapter = QuizDetailsAdapter(this, quiz,
+         { it1, it2 -> onAnswerPicked(it1, it2) }, { onFinishPressed() })
 
       activityRecyclerView.layoutManager = LinearLayoutManager(this)
       activityRecyclerView.adapter = quizDetailsAdapter
@@ -64,7 +68,7 @@ class QuizDetailsActivity : BaseActivity() {
       }
    }
 
-   private fun loadQuizDetailsError(it: Throwable) {
+   private fun onViewModelError(it: Throwable?) {
       if (it is NoNetworkException) {
          showToastLong(R.string.no_network_message)
       } else {
@@ -73,8 +77,8 @@ class QuizDetailsActivity : BaseActivity() {
       finish()
    }
 
-   private fun onQuizModified() {
-
+   private fun onAnswerPicked(question: Question, answer: Answer) {
+      viewModel.pickAnswer(answer, question)
    }
 
    private fun onFinishPressed() {

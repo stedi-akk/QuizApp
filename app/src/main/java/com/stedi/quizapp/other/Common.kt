@@ -64,3 +64,7 @@ var View.visibleOrGone: Boolean
          View.GONE
       }
    }
+
+fun Int.toBoolean() = this == 1
+
+fun Boolean.toInt() = if (this) 1 else 0
