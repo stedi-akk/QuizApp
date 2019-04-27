@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 import kotlinx.android.parcel.Parcelize
+import kotlin.math.roundToInt
 
 @Parcelize
 @DatabaseTable(tableName = "quizzes")
@@ -31,5 +32,13 @@ data class Quiz(
 
    @SerializedName("mainPhoto")
    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, columnName = "main_photo")
-   var image: Image? = null
-) : Parcelable
+   var image: Image? = null,
+
+   @DatabaseField(columnName = "answered_count")
+   var answeredCount: Int = 0
+) : Parcelable {
+
+   fun getPercentageProgress(): Int {
+      return (100f / questionsCount.toFloat() * answeredCount.toFloat()).roundToInt()
+   }
+}

@@ -16,7 +16,7 @@ class QuizDetailsVM @Inject constructor(
    private val quizRepository: QuizRepository
 ) : ViewModel() {
 
-   val quizDetailsLoaded = MutableLiveData<QuizDetails>()
+   val quizDetailsLoaded = MutableLiveData<Pair<Quiz, QuizDetails>>()
    val loadQuizDetailsError = MutableLiveData<Throwable>()
    val failedToPickAnswer = MutableLiveData<Triple<Answer, Question, Throwable?>>()
 
@@ -32,7 +32,7 @@ class QuizDetailsVM @Inject constructor(
          .toSingle()
          .ioMain()
          .subscribe({
-            quizDetailsLoaded.value = it
+            quizDetailsLoaded.value = quiz to it
          }, {
             it.printStackTrace()
             loadQuizDetailsError.value = it
@@ -43,20 +43,27 @@ class QuizDetailsVM @Inject constructor(
    }
 
    fun pickAnswer(answer: Answer, question: Question) {
-      val details = quizDetailsLoaded.value
-      if (details == null) {
+      val quiz = quizDetailsLoaded.value?.first
+      val details = quizDetailsLoaded.value?.second
+      if (quiz == null || details == null) {
          failedToPickAnswer.value = Triple(answer, question, null)
          return
       }
+
+      // unpick previous answer
       question.answers.find { it.isPicked == true.toInt() }?.isPicked = false.toInt()
+      // pick a new one
       answer.isPicked = true.toInt()
+      // update answered count in quiz object
+      quiz.answeredCount = details.questions.filter { !it.answers.none { it.isPicked == true.toInt() } }.size
+
       quizRepository.saveDetails(details)
+         .andThen(quizRepository.save(quiz))
          .ioMain()
          .subscribe({
             // ignore
          }, {
             it.printStackTrace()
-            answer.isPicked = false.toInt()
             failedToPickAnswer.value = Triple(answer, question, it)
          })
          .let {

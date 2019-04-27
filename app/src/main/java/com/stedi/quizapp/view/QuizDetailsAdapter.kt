@@ -23,7 +23,7 @@ class QuizDetailsHolder(item: View) : RecyclerView.ViewHolder(item)
 class QuizDetailsAdapter(
    private val context: Context,
    private val quiz: Quiz,
-   private val onAnswerPicked: (Question, Answer) -> Unit,
+   private val onAnswerPicked: (Answer, Question) -> Unit,
    private val onFinishPressed: () -> Unit
 ) : RecyclerView.Adapter<QuizDetailsHolder>() {
 
@@ -131,7 +131,7 @@ class QuizDetailsAdapter(
             questionsRadioGroup.addView(rb)
          }
          questionsRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-            onAnswerPicked(question, question.answers.elementAt(checkedId))
+            onAnswerPicked(question.answers.elementAt(checkedId), question)
          }
       }
    }

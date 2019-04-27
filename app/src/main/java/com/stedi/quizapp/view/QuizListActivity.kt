@@ -39,9 +39,7 @@ class QuizListActivity : BaseActivity() {
 
    override fun onStart() {
       super.onStart()
-      if (quizListAdapter.itemCount == 0) {
-         viewModel.loadQuizList()
-      }
+      viewModel.loadQuizList()
    }
 
    private fun quizListLoaded(it: List<Quiz>) {

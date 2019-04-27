@@ -15,7 +15,7 @@ import com.stedi.quizapp.model.QuizDetails
 import com.stedi.quizapp.other.NoNetworkException
 import com.stedi.quizapp.other.showToastLong
 import com.stedi.quizapp.vm.QuizDetailsVM
-import kotlinx.android.synthetic.main.quiz_list_activity.*
+import kotlinx.android.synthetic.main.quiz_details_activity.*
 import javax.inject.Inject
 
 class QuizDetailsActivity : BaseActivity() {
@@ -44,7 +44,7 @@ class QuizDetailsActivity : BaseActivity() {
       quiz = intent.extras?.getParcelable(KEY_QUIZ_EXTRA) ?: throw IllegalStateException("quiz object is required")
 
       viewModel = ViewModelProviders.of(this, viewModelFactory)[QuizDetailsVM::class.java].apply {
-         quizDetailsLoaded.observe(this@QuizDetailsActivity, Observer { quizDetailsLoaded(it) })
+         quizDetailsLoaded.observe(this@QuizDetailsActivity, Observer { quizDetailsLoaded(it.second) })
          loadQuizDetailsError.observe(this@QuizDetailsActivity, Observer { onViewModelError(it) })
          failedToPickAnswer.observe(this@QuizDetailsActivity, Observer { onViewModelError(it.third) })
       }
@@ -56,6 +56,8 @@ class QuizDetailsActivity : BaseActivity() {
 
       activityRecyclerView.layoutManager = LinearLayoutManager(this)
       activityRecyclerView.adapter = quizDetailsAdapter
+
+      invalidateProgress()
 
       viewModel.loadQuizDetails(quiz)
    }
@@ -77,11 +79,18 @@ class QuizDetailsActivity : BaseActivity() {
       finish()
    }
 
-   private fun onAnswerPicked(question: Question, answer: Answer) {
+   private fun onAnswerPicked(answer: Answer, question: Question) {
       viewModel.pickAnswer(answer, question)
+      invalidateProgress()
    }
 
    private fun onFinishPressed() {
 
+   }
+
+   private fun invalidateProgress() {
+      quizProgressTitle.text = getString(R.string.quiz_progress_title, quiz.answeredCount.toString(), quiz.questionsCount.toString())
+      quizProgress.max = quiz.questionsCount
+      quizProgress.progress = quiz.answeredCount
    }
 }

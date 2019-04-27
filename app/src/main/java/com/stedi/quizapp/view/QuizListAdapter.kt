@@ -10,6 +10,7 @@ import com.stedi.quizapp.R
 import com.stedi.quizapp.model.Quiz
 import com.stedi.quizapp.other.visibleOrGone
 import kotlinx.android.synthetic.main.quiz_content.view.*
+import kotlinx.android.synthetic.main.quiz_item.view.*
 
 class QuizHolder(item: View) : RecyclerView.ViewHolder(item)
 
@@ -54,6 +55,11 @@ class QuizListAdapter(
          quizContent.visibleOrGone = !quiz.content.isNullOrEmpty()
          quizTitle.text = quiz.title ?: TEXT_NOT_FOUND
          quizContent.text = quiz.content ?: TEXT_NOT_FOUND
+         quizStatus.text = if (quiz.answeredCount == 0) {
+            context.getString(R.string.quiz_new)
+         } else {
+            context.getString(R.string.quiz_in_progress, quiz.getPercentageProgress().toString())
+         }
          setOnClickListener { clickListener(quiz) }
       }
    }
