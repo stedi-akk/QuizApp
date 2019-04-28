@@ -36,7 +36,9 @@ class QuizFinishedActivity : BaseActivity() {
    override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
 
-      quiz = intent.extras?.getParcelable(KEY_QUIZ_EXTRA) ?: throw IllegalStateException("quiz object is required")
+      quiz = savedInstanceState?.getParcelable<Quiz>(KEY_QUIZ_EXTRA)
+         ?: intent.extras?.getParcelable(KEY_QUIZ_EXTRA)
+               ?: throw IllegalStateException("quiz object is required")
 
       viewModel = ViewModelProviders.of(this, viewModelFactory)[QuizFinishVM::class.java].apply {
          quizMarkedAsFinished.observe(this@QuizFinishedActivity, Observer { showResult() })
@@ -57,10 +59,18 @@ class QuizFinishedActivity : BaseActivity() {
       }
    }
 
+   override fun onSaveInstanceState(outState: Bundle) {
+      super.onSaveInstanceState(outState)
+      outState.putParcelable(KEY_QUIZ_EXTRA, quiz)
+   }
+
    private fun showResult() {
-      yourResult.text = getString(
-         R.string.your_result,
-         quiz.getPercentageResult().toString(),
+      resultPercentage.text = getString(
+         R.string.result_percentage,
+         quiz.getPercentageResult().toString()
+      )
+      resultOutOf.text = getString(
+         R.string.result_out_of,
          quiz.correctAnsweredCount.toString(),
          quiz.questionsCount.toString()
       )

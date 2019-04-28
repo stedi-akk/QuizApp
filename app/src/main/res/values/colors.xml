@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <color name="mainColor">#FF5722</color>
-   <color name="colorPrimary">@color/mainColor</color>
-   <color name="colorPrimaryDark">@color/mainColor</color>
-   <color name="colorAccent">@color/mainColor</color>
+   <color name="main_color">#8BC34A</color>
+   <color name="main_color_transparent">#808BC34A</color>
+   <color name="colorPrimary">@color/main_color</color>
+   <color name="colorPrimaryDark">@color/main_color</color>
+   <color name="colorAccent">@color/main_color</color>
 </resources>

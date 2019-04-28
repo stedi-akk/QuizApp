@@ -10,6 +10,7 @@ import com.stedi.quizapp.model.Quiz
 import com.stedi.quizapp.other.NoNetworkException
 import com.stedi.quizapp.other.showToastLong
 import com.stedi.quizapp.other.toBoolean
+import com.stedi.quizapp.other.visibleOrGone
 import com.stedi.quizapp.vm.QuizListVM
 import kotlinx.android.synthetic.main.quiz_list_activity.*
 import javax.inject.Inject
@@ -45,6 +46,7 @@ class QuizListActivity : BaseActivity() {
 
    private fun quizListLoaded(it: List<Quiz>) {
       quizListAdapter.setData(it)
+      activityProgress.visibleOrGone = false
       if (it.isEmpty()) {
          showToastLong(R.string.nothing_to_show)
       }

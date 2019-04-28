@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper
 import com.j256.ormlite.dao.Dao
+import com.j256.ormlite.misc.TransactionManager
 import com.j256.ormlite.support.ConnectionSource
 import com.j256.ormlite.table.TableUtils
 import com.stedi.quizapp.model.*
@@ -36,39 +37,51 @@ class DatabaseQuizRepository(
 
    override fun get(count: Int): Single<List<Quiz>> {
       return Single.fromCallable {
-         getDao(Quiz::class.java).let {
-            it.query(it.queryBuilder().limit(count.toLong()).prepare())
+         synchronized(this@DatabaseQuizRepository) {
+            getDao(Quiz::class.java).let {
+               it.query(it.queryBuilder().limit(count.toLong()).prepare())
+            }
          }
       }
    }
 
    override fun getDetails(quiz: Quiz): Maybe<QuizDetails> {
       return Maybe.create { emitter ->
-         getDao(QuizDetails::class.java).let {
-            it.query(it.queryBuilder().where().eq("id", quiz.id).prepare())
-         }.firstOrNull()?.let {
-            emitter.onSuccess(it)
-         } ?: emitter.onComplete()
+         synchronized(this@DatabaseQuizRepository) {
+            getDao(QuizDetails::class.java).let {
+               it.query(it.queryBuilder().where().eq("id", quiz.id).prepare())
+            }.firstOrNull()?.let {
+               emitter.onSuccess(it)
+            } ?: emitter.onComplete()
+         }
       }
    }
 
    override fun save(quiz: Quiz): Completable {
       return Completable.fromCallable {
-         verifySaved(getDao(Quiz::class.java).createOrUpdate(quiz))
+         synchronized(this@DatabaseQuizRepository) {
+            TransactionManager.callInTransaction(getConnectionSource()) {
+               verifySaved(getDao(Quiz::class.java).createOrUpdate(quiz))
+            }
+         }
       }
    }
 
    override fun saveDetails(quizDetails: QuizDetails): Completable {
       return Completable.fromCallable {
-         quizDetails.questions.forEach { question ->
-            question.answers.forEach { answer ->
-               answer.question = question
-               verifySaved(getDao(Answer::class.java).createOrUpdate(answer))
+         synchronized(this@DatabaseQuizRepository) {
+            TransactionManager.callInTransaction(getConnectionSource()) {
+               quizDetails.questions.forEach { question ->
+                  question.answers.forEach { answer ->
+                     answer.question = question
+                     verifySaved(getDao(Answer::class.java).createOrUpdate(answer))
+                  }
+                  question.quizzesDetails = quizDetails
+                  verifySaved(getDao(Question::class.java).createOrUpdate(question))
+               }
+               verifySaved(getDao(QuizDetails::class.java).createOrUpdate(quizDetails))
             }
-            question.quizzesDetails = quizDetails
-            verifySaved(getDao(Question::class.java).createOrUpdate(question))
          }
-         verifySaved(getDao(QuizDetails::class.java).createOrUpdate(quizDetails))
       }
    }
 

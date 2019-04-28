@@ -41,7 +41,9 @@ class QuizDetailsActivity : BaseActivity() {
    override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
 
-      quiz = intent.extras?.getParcelable(KEY_QUIZ_EXTRA) ?: throw IllegalStateException("quiz object is required")
+      quiz = savedInstanceState?.getParcelable<Quiz>(KEY_QUIZ_EXTRA)
+         ?: intent.extras?.getParcelable(KEY_QUIZ_EXTRA)
+               ?: throw IllegalStateException("quiz object is required")
 
       viewModel = ViewModelProviders.of(this, viewModelFactory)[QuizDetailsVM::class.java].apply {
          quizDetailsLoaded.observe(this@QuizDetailsActivity, Observer { quizDetailsLoaded(it.second) })
@@ -53,13 +55,16 @@ class QuizDetailsActivity : BaseActivity() {
 
       quizDetailsAdapter = QuizDetailsAdapter(this, quiz,
          { it1, it2 -> onAnswerPicked(it1, it2) }, { onFinishPressed() })
-
       activityRecyclerView.layoutManager = LinearLayoutManager(this)
       activityRecyclerView.adapter = quizDetailsAdapter
-
       invalidateProgress()
 
       viewModel.loadQuizDetails(quiz)
+   }
+
+   override fun onSaveInstanceState(outState: Bundle) {
+      super.onSaveInstanceState(outState)
+      outState.putParcelable(KEY_QUIZ_EXTRA, quiz)
    }
 
    private fun quizDetailsLoaded(it: QuizDetails) {

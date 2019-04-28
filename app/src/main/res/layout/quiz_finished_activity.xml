@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
    xmlns:tools="http://schemas.android.com/tools"
    android:layout_width="match_parent"
    android:layout_height="match_parent"
    android:layout_marginBottom="@dimen/tb_spacing"
    android:layout_marginLeft="@dimen/lr_spacing"
    android:layout_marginRight="@dimen/lr_spacing"
-   android:layout_marginTop="@dimen/tb_spacing"
-   android:orientation="vertical">
+   android:layout_marginTop="@dimen/tb_spacing">
+
+   <Button
+      android:id="@+id/backToQuizListButton"
+      style="@style/Widget.AppCompat.Button.Colored"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:text="@string/back_to_quiz_list"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent" />
+
+   <Button
+      android:id="@+id/solveQuizAgainButton"
+      style="@style/Widget.AppCompat.Button.Colored"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:text="@string/solve_quiz_again"
+      app:layout_constraintBottom_toTopOf="@+id/backToQuizListButton"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent" />
 
    <TextView
       style="@style/QuizTitle"
@@ -15,33 +35,54 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"
       android:layout_margin="32dp"
-      android:text="@string/congratulations" />
+      android:text="@string/congratulations"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+   <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.33" />
 
    <TextView
-      android:id="@+id/yourResult"
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"
-      android:layout_weight="1"
-      android:gravity="center"
-      android:text="@string/congratulations"
+      android:text="@string/your_result"
+      android:textSize="16sp"
+      android:textStyle="bold"
+      app:layout_constraintBottom_toTopOf="@+id/guideline"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent" />
+
+   <TextView
+      android:id="@+id/resultPercentage"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:gravity="center_horizontal"
       android:textColor="@android:color/black"
       android:textSize="32sp"
       android:textStyle="bold"
-      tools:text="@string/your_result" />
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/guideline"
+      tools:text="@string/result_percentage" />
 
-   <Button
-      android:id="@+id/solveQuizAgainButton"
-      style="@style/Widget.AppCompat.Button.Colored"
+   <TextView
+      android:id="@+id/resultOutOf"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="@string/solve_quiz_again" />
+      android:layout_gravity="center_horizontal"
+      android:gravity="center_horizontal"
+      android:textSize="16sp"
+      android:textStyle="bold"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/resultPercentage"
+      tools:text="@string/result_out_of" />
 
-   <Button
-      android:id="@+id/backToQuizListButton"
-      style="@style/Widget.AppCompat.Button.Colored"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:text="@string/back_to_quiz_list" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

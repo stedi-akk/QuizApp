@@ -7,6 +7,10 @@ import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 
+/**
+ * To map data from second source to first source.
+ * For example, to save data from server to database.
+ */
 class QuizRepositorySourceMapper(
    private val firstSource: QuizRepository,
    private val secondSource: QuizRepository

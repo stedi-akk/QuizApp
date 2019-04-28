@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.stedi.quizapp.R
 import com.stedi.quizapp.model.Quiz
+import com.stedi.quizapp.other.isLollipopOrBigger
 import com.stedi.quizapp.other.toBoolean
 import com.stedi.quizapp.other.visibleOrGone
 import kotlinx.android.synthetic.main.quiz_content.view.*
@@ -45,6 +46,11 @@ class QuizListAdapter(
             quizImage.visibleOrGone = true
             Picasso.get()
                .load(quiz.image!!.url)
+               .also {
+                  if (isLollipopOrBigger()) {
+                     it.placeholder(R.drawable.ic_image_placeholder).error(R.drawable.ic_broken_image)
+                  }
+               }
                .fit()
                .centerCrop()
                .into(quizImage)

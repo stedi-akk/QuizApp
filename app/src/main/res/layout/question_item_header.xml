@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
    android:layout_width="match_parent"
    android:layout_height="wrap_content"
+   android:layout_marginTop="@dimen/tb_spacing"
    android:layout_marginLeft="@dimen/lr_spacing"
    android:layout_marginRight="@dimen/lr_spacing"
    android:orientation="vertical">

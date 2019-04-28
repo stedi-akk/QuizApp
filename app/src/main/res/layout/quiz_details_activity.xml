@@ -10,8 +10,8 @@
       style="@style/QuizTitleMedium"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:gravity="center_horizontal"
       android:layout_marginTop="8dp"
+      android:gravity="center_horizontal"
       tools:text="@string/quiz_progress_title" />
 
    <ProgressBar
@@ -21,9 +21,20 @@
       android:layout_height="wrap_content"
       android:layout_margin="8dp" />
 
-   <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/activityRecyclerView"
+   <FrameLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+      android:layout_height="match_parent">
+
+      <androidx.recyclerview.widget.RecyclerView
+         android:id="@+id/activityRecyclerView"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent" />
+
+      <View
+         android:layout_width="match_parent"
+         android:layout_height="6dp"
+         android:background="@drawable/shape_shadow_down" />
+
+   </FrameLayout>
 
 </LinearLayout>

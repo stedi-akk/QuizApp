@@ -12,6 +12,7 @@ import com.stedi.quizapp.model.Answer
 import com.stedi.quizapp.model.Question
 import com.stedi.quizapp.model.Quiz
 import com.stedi.quizapp.model.QuizDetails
+import com.stedi.quizapp.other.isLollipopOrBigger
 import com.stedi.quizapp.other.toBoolean
 import com.stedi.quizapp.other.visibleOrGone
 import kotlinx.android.synthetic.main.question_item.view.*
@@ -34,6 +35,7 @@ class QuizDetailsAdapter(
 
    private enum class ViewType {
       HEADER,
+      LOADING,
       QUESTION,
       FOOTER
    }
@@ -53,27 +55,33 @@ class QuizDetailsAdapter(
 
    override fun getItemCount(): Int {
       return if (quizDetails.questions.isEmpty()) {
-         1
+         2 // header and loading
       } else {
-         1 + quizDetails.questions.size + 1
+         1 + quizDetails.questions.size + 1 // header, questions and footer
       }
    }
 
    override fun getItemViewType(position: Int): Int {
       return if (position == 0) {
          ViewType.HEADER.ordinal
-      } else if (position > 0 && position == itemCount - 1) {
-         ViewType.FOOTER.ordinal
+      } else if (quizDetails != EMPTY_DETAILS) {
+         if (position > 0 && position == itemCount - 1) {
+            ViewType.FOOTER.ordinal
+         } else {
+            ViewType.QUESTION.ordinal
+         }
       } else {
-         ViewType.QUESTION.ordinal
+         ViewType.LOADING.ordinal
       }
    }
 
    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuizDetailsHolder {
       val layout = when (viewType) {
          ViewType.HEADER.ordinal -> R.layout.question_item_header
+         ViewType.LOADING.ordinal -> R.layout.question_item_loading
+         ViewType.QUESTION.ordinal -> R.layout.question_item
          ViewType.FOOTER.ordinal -> R.layout.question_item_footer
-         else -> R.layout.question_item
+         else -> throw IllegalStateException("no such supported viewType")
       }
       return QuizDetailsHolder(LayoutInflater.from(context).inflate(layout, parent, false))
    }
@@ -81,8 +89,10 @@ class QuizDetailsAdapter(
    override fun onBindViewHolder(holder: QuizDetailsHolder, position: Int) {
       when (getItemViewType(position)) {
          ViewType.HEADER.ordinal -> onBindHeader(holder, quiz)
+         ViewType.LOADING.ordinal -> Unit
+         ViewType.QUESTION.ordinal -> onBindQuestion(holder, quizDetails.questions.elementAt(position - 1))
          ViewType.FOOTER.ordinal -> onBindFooter(holder)
-         else -> onBindQuestion(holder, quizDetails.questions.elementAt(position - 1))
+         else -> throw IllegalStateException("no such supported viewType")
       }
    }
 
@@ -92,6 +102,11 @@ class QuizDetailsAdapter(
             quizImage.visibleOrGone = true
             Picasso.get()
                .load(quiz.image!!.url)
+               .also {
+                  if (isLollipopOrBigger()) {
+                     it.placeholder(R.drawable.ic_image_placeholder).error(R.drawable.ic_broken_image)
+                  }
+               }
                .fit()
                .centerInside()
                .into(quizImage)
@@ -121,6 +136,11 @@ class QuizDetailsAdapter(
             questionImage.visibleOrGone = true
             Picasso.get()
                .load(question.image!!.url)
+               .also {
+                  if (isLollipopOrBigger()) {
+                     it.placeholder(R.drawable.ic_image_placeholder).error(R.drawable.ic_broken_image)
+                  }
+               }
                .fit()
                .centerInside()
                .into(questionImage)
@@ -135,6 +155,7 @@ class QuizDetailsAdapter(
                id = index
                text = answer.text ?: TEXT_NOT_FOUND
                isChecked = answer.isPicked.toBoolean()
+               jumpDrawablesToCurrentState()
             }
             questionsRadioGroup.addView(rb)
          }

@@ -2,6 +2,7 @@ package com.stedi.quizapp.other
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.widget.Toast
@@ -68,3 +69,5 @@ var View.visibleOrGone: Boolean
 fun Int.toBoolean() = this == 1
 
 fun Boolean.toInt() = if (this) 1 else 0
+
+fun isLollipopOrBigger() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP

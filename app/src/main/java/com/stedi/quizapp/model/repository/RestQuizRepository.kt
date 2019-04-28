@@ -20,9 +20,9 @@ class RestQuizRepository(
 
    private interface GetCall {
       @GET("quizzes/0/{count}")
-      fun call(@Path("count") count: Int): Call<TempResponse>
+      fun call(@Path("count") count: Int): Call<TempObject>
 
-      class TempResponse(
+      class TempObject(
          @SerializedName("items") val items: List<Quiz> = emptyList()
       )
    }
