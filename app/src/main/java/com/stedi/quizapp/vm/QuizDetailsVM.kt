@@ -18,7 +18,7 @@ class QuizDetailsVM @Inject constructor(
 
    val quizDetailsLoaded = MutableLiveData<Pair<Quiz, QuizDetails>>()
    val loadQuizDetailsError = MutableLiveData<Throwable>()
-   val failedToPickAnswer = MutableLiveData<Triple<Answer, Question, Throwable?>>()
+   val pickAnswerError = MutableLiveData<Triple<Answer, Question, Throwable?>>()
 
    private val disposables: CompositeDisposable = CompositeDisposable()
 
@@ -46,7 +46,7 @@ class QuizDetailsVM @Inject constructor(
       val quiz = quizDetailsLoaded.value?.first
       val details = quizDetailsLoaded.value?.second
       if (quiz == null || details == null) {
-         failedToPickAnswer.value = Triple(answer, question, null)
+         pickAnswerError.value = Triple(answer, question, null)
          return
       }
 
@@ -64,7 +64,7 @@ class QuizDetailsVM @Inject constructor(
             // ignore
          }, {
             it.printStackTrace()
-            failedToPickAnswer.value = Triple(answer, question, it)
+            pickAnswerError.value = Triple(answer, question, it)
          })
          .let {
             disposables.add(it)

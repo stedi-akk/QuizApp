@@ -35,10 +35,20 @@ data class Quiz(
    var image: Image? = null,
 
    @DatabaseField(columnName = "answered_count")
-   var answeredCount: Int = 0
+   var answeredCount: Int = 0,
+
+   @DatabaseField(columnName = "correct_answered_count")
+   var correctAnsweredCount: Int = 0,
+
+   @DatabaseField(columnName = "is_finished")
+   var isFinished: Int = 0
 ) : Parcelable {
 
    fun getPercentageProgress(): Int {
       return (100f / questionsCount.toFloat() * answeredCount.toFloat()).roundToInt()
+   }
+
+   fun getPercentageResult(): Int {
+      return (100f / questionsCount.toFloat() * correctAnsweredCount.toFloat()).roundToInt()
    }
 }

@@ -9,6 +9,7 @@ import com.stedi.quizapp.R
 import com.stedi.quizapp.model.Quiz
 import com.stedi.quizapp.other.NoNetworkException
 import com.stedi.quizapp.other.showToastLong
+import com.stedi.quizapp.other.toBoolean
 import com.stedi.quizapp.vm.QuizListVM
 import kotlinx.android.synthetic.main.quiz_list_activity.*
 import javax.inject.Inject
@@ -58,6 +59,10 @@ class QuizListActivity : BaseActivity() {
    }
 
    private fun openQuiz(quiz: Quiz) {
-      QuizDetailsActivity.start(this, quiz)
+      if (quiz.isFinished.toBoolean()) {
+         QuizFinishedActivity.start(this, quiz)
+      } else {
+         QuizDetailsActivity.start(this, quiz)
+      }
    }
 }

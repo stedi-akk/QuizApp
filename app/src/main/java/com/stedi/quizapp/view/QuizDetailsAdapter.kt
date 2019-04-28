@@ -39,10 +39,16 @@ class QuizDetailsAdapter(
    }
 
    private var quizDetails = EMPTY_DETAILS
+   private var finishButtonEnabled = false
 
    fun setData(quizDetails: QuizDetails?) {
       this.quizDetails = quizDetails ?: EMPTY_DETAILS
       notifyDataSetChanged()
+   }
+
+   fun setFinishButtonEnabled(it: Boolean) {
+      finishButtonEnabled = it
+      notifyItemChanged(itemCount - 1)
    }
 
    override fun getItemCount(): Int {
@@ -102,6 +108,7 @@ class QuizDetailsAdapter(
 
    private fun onBindFooter(holder: QuizDetailsHolder) {
       holder.itemView.apply {
+         finishButton.isEnabled = finishButtonEnabled
          finishButton.setOnClickListener {
             onFinishPressed()
          }
@@ -121,6 +128,7 @@ class QuizDetailsAdapter(
             questionImage.visibleOrGone = false
          }
          questionTitle.text = question.text ?: TEXT_NOT_FOUND
+         questionsRadioGroup.setOnCheckedChangeListener(null)
          questionsRadioGroup.removeAllViews()
          question.answers.forEachIndexed { index, answer ->
             val rb = AppCompatRadioButton(context).apply {

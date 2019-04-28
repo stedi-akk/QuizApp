@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.stedi.quizapp.di.vm.ViewModelFactory
 import com.stedi.quizapp.di.vm.ViewModelKey
 import com.stedi.quizapp.vm.QuizDetailsVM
+import com.stedi.quizapp.vm.QuizFinishVM
 import com.stedi.quizapp.vm.QuizListVM
 import dagger.Binds
 import dagger.Module
@@ -25,4 +26,9 @@ abstract class ViewModelModule {
    @IntoMap
    @ViewModelKey(QuizDetailsVM::class)
    abstract fun quizDetailsVM(viewModel: QuizDetailsVM): ViewModel
+
+   @Binds
+   @IntoMap
+   @ViewModelKey(QuizFinishVM::class)
+   abstract fun quizFinishVM(viewModel: QuizFinishVM): ViewModel
 }

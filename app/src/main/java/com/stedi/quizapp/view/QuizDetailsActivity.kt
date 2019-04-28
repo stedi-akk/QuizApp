@@ -46,7 +46,7 @@ class QuizDetailsActivity : BaseActivity() {
       viewModel = ViewModelProviders.of(this, viewModelFactory)[QuizDetailsVM::class.java].apply {
          quizDetailsLoaded.observe(this@QuizDetailsActivity, Observer { quizDetailsLoaded(it.second) })
          loadQuizDetailsError.observe(this@QuizDetailsActivity, Observer { onViewModelError(it) })
-         failedToPickAnswer.observe(this@QuizDetailsActivity, Observer { onViewModelError(it.third) })
+         pickAnswerError.observe(this@QuizDetailsActivity, Observer { onViewModelError(it.third) })
       }
 
       setContentView(R.layout.quiz_details_activity)
@@ -85,12 +85,14 @@ class QuizDetailsActivity : BaseActivity() {
    }
 
    private fun onFinishPressed() {
-
+      QuizFinishedActivity.start(this, quiz)
+      finish()
    }
 
    private fun invalidateProgress() {
       quizProgressTitle.text = getString(R.string.quiz_progress_title, quiz.answeredCount.toString(), quiz.questionsCount.toString())
       quizProgress.max = quiz.questionsCount
       quizProgress.progress = quiz.answeredCount
+      quizDetailsAdapter.setFinishButtonEnabled(quiz.answeredCount == quiz.questionsCount)
    }
 }

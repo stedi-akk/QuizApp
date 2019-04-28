@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.stedi.quizapp.R
 import com.stedi.quizapp.model.Quiz
+import com.stedi.quizapp.other.toBoolean
 import com.stedi.quizapp.other.visibleOrGone
 import kotlinx.android.synthetic.main.quiz_content.view.*
 import kotlinx.android.synthetic.main.quiz_item.view.*
@@ -57,6 +58,8 @@ class QuizListAdapter(
          quizContent.text = quiz.content ?: TEXT_NOT_FOUND
          quizStatus.text = if (quiz.answeredCount == 0) {
             context.getString(R.string.quiz_new)
+         } else if (quiz.isFinished.toBoolean()) {
+            context.getString(R.string.quiz_finished, quiz.getPercentageResult().toString())
          } else {
             context.getString(R.string.quiz_in_progress, quiz.getPercentageProgress().toString())
          }

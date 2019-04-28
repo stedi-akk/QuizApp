@@ -24,6 +24,8 @@
 
       <activity android:name=".view.QuizDetailsActivity" />
 
+      <activity android:name=".view.QuizFinishedActivity" />
+
    </application>
 
 </manifest>

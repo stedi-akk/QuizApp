@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:layout_marginBottom="@dimen/tb_spacing"
+   android:layout_marginLeft="@dimen/lr_spacing"
+   android:layout_marginRight="@dimen/lr_spacing"
+   android:layout_marginTop="@dimen/tb_spacing"
+   android:orientation="vertical">
+
+   <TextView
+      style="@style/QuizTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_margin="32dp"
+      android:text="@string/congratulations" />
+
+   <TextView
+      android:id="@+id/yourResult"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_gravity="center_horizontal"
+      android:layout_weight="1"
+      android:gravity="center"
+      android:text="@string/congratulations"
+      android:textColor="@android:color/black"
+      android:textSize="32sp"
+      android:textStyle="bold"
+      tools:text="@string/your_result" />
+
+   <Button
+      android:id="@+id/solveQuizAgainButton"
+      style="@style/Widget.AppCompat.Button.Colored"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/solve_quiz_again" />
+
+   <Button
+      android:id="@+id/backToQuizListButton"
+      style="@style/Widget.AppCompat.Button.Colored"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/back_to_quiz_list" />
+
+</LinearLayout>
